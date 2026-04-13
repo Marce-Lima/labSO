@@ -12,14 +12,14 @@ int main() {
 
   while (1) {
     printf("> ");
-    scanf("%s", comando);
+    scanf("%s", comando); //fget - ler comandos inteiros
     if (!strcmp(comando, "exit")) {
       exit(EXIT_SUCCESS);
     }
 
     pid = fork();
     if (pid) {
-      waitpid(pid, NULL, 0); 
+      waitpid(pid, NULL, 0); //ler com & 
     } else {
       execlp(comando, comando, NULL);
       printf("Erro ao executar comando!\n");
@@ -27,3 +27,5 @@ int main() {
     }
   }
 }
+
+//execvp
