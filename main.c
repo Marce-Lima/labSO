@@ -21,6 +21,7 @@ int main() {
 
   //loop shell
   while (1) {
+    
     booleano = 0;// booleano para identificar o & e avisar para que nao é para ser executado
     contador = 0; // Conta quantas palavras tem a string kk
     printf("> ");
@@ -63,16 +64,38 @@ int main() {
     }
     
     pid = fork();
+    char text[MAX];
+
     if (pid == 0) {
-        execvp(tk[0], tk);
+      // > redireciona a saída para ...
+      // verifica em todas as palavras se tem um >
+      for(int i = 1; i < contador; i++){
+        if(strcmp(tk[i], ">") == 0){
+          if(freopen(tk[i+1], "w", stdout) == NULL){
+            perror("Erro ao abrir arquivo.txt");
+            break;
+          }
+          tk[i] = NULL;
+          break;
+        }
+        // < redireciona a entrada para ...
+        if(strcmp(tk[i], "<") == 0){
+          if(freopen(tk[i+1], "r", stdin) == NULL){
+            perror("Erro ao abrir arquivo.txt");
+            break;
+          }
+          tk[i] = NULL;
+          break;
+        }
+      }
+      execvp(tk[0], tk);
       printf("Erro ao executar comando!\n");
       exit(EXIT_FAILURE); 
     } else {
       if(booleano == 0){
-          waitpid(pid, NULL, 0); 
-       }
+        waitpid(pid, NULL, 0); 
+      }
     }
-    
     
     //Zerando o vetor para ser usado novamente ;)
     for(int i = 0; i < 128; i++){
